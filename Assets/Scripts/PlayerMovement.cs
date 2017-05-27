@@ -42,5 +42,11 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+
+        // 
+        if (enemyClicked)
+        {
+
+        }
     }
 }
