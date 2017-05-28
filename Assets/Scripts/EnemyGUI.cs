@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class EnemyGUI : MonoBehaviour
 {
+    public GUISkin enemyGUISkin;
+
     private Vector3 enemyScreenLocation;
 
     private Vector2 buttonOneOffset;
@@ -23,6 +26,20 @@ public class EnemyGUI : MonoBehaviour
     // Use for initialisation.
     void Start()
     {
+        if (!enemyGUISkin)
+        {
+            Debug.LogError("Error: enemyGUISkin reference missing - attempting to load manually from path");
+            enemyGUISkin = (GUISkin)AssetDatabase.LoadAssetAtPath("Assets/GUI/EnemyGUISkin.guiskin", typeof(GUISkin));
+            if (enemyGUISkin)
+            {
+                Debug.Log("enemyGUISkin successfully manually loaded");
+            }
+            else
+            {
+                Debug.LogError("Error: enemyGUISkin could not be loaded");
+            }
+        }
+
         buttonWidth = 75.0f;
         buttonHeight = 30.0f;
 
@@ -44,6 +61,9 @@ public class EnemyGUI : MonoBehaviour
     {
         if (isEnabled)
         {
+            GUI.skin = enemyGUISkin;
+            //GUI.Label(new Rect(enemyScreenLocation.x + buttonOneOffset.x, (Screen.height - enemyScreenLocation.y) + buttonOneOffset.y, buttonWidth, buttonHeight), "Eliminate");
+            //GUI.Label(new Rect(enemyScreenLocation.x + buttonTwoOffset.x, (Screen.height - enemyScreenLocation.y) + buttonTwoOffset.y, buttonWidth, buttonHeight), "Subdue");
             GUI.Button(new Rect(enemyScreenLocation.x + buttonOneOffset.x, (Screen.height - enemyScreenLocation.y) + buttonOneOffset.y, buttonWidth, buttonHeight), "Eliminate");
             GUI.Button(new Rect(enemyScreenLocation.x + buttonTwoOffset.x, (Screen.height - enemyScreenLocation.y) + buttonTwoOffset.y, buttonWidth, buttonHeight), "Subdue");
         }
