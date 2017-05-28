@@ -12,6 +12,14 @@ public class EnemyGUI : MonoBehaviour
     private float buttonWidth;
     private float buttonHeight;
 
+    private bool isEnabled;
+
+    public bool IsEnabled
+    {
+        get { return isEnabled; }
+        set { isEnabled = value; }
+    }
+
     // Use for initialisation.
     void Start()
     {
@@ -21,6 +29,8 @@ public class EnemyGUI : MonoBehaviour
         float buttonOffset = 100.0f;
         buttonOneOffset = new Vector2(-buttonOffset, -(buttonHeight * 0.5f));
         buttonTwoOffset = new Vector2(buttonOffset - buttonWidth, -(buttonHeight * 0.5f));
+
+        isEnabled = false;
     }
 
     // Update is called once per frame.
@@ -32,7 +42,10 @@ public class EnemyGUI : MonoBehaviour
     // Called for rendering and handling GUI events.
     void OnGUI()
     {
-        GUI.Button(new Rect(enemyScreenLocation.x + buttonOneOffset.x, (Screen.height - enemyScreenLocation.y) + buttonOneOffset.y, buttonWidth, buttonHeight), "Eliminate");
-        GUI.Button(new Rect(enemyScreenLocation.x + buttonTwoOffset.x, (Screen.height - enemyScreenLocation.y) + buttonTwoOffset.y, buttonWidth, buttonHeight), "Subdue");
+        if (isEnabled)
+        {
+            GUI.Button(new Rect(enemyScreenLocation.x + buttonOneOffset.x, (Screen.height - enemyScreenLocation.y) + buttonOneOffset.y, buttonWidth, buttonHeight), "Eliminate");
+            GUI.Button(new Rect(enemyScreenLocation.x + buttonTwoOffset.x, (Screen.height - enemyScreenLocation.y) + buttonTwoOffset.y, buttonWidth, buttonHeight), "Subdue");
+        }
     }
 }

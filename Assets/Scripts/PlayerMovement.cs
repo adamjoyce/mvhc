@@ -31,7 +31,6 @@ public class PlayerMovement : MonoBehaviour
                     // Enemy clicked.
                     targetedEnemy = hit.transform;
                     enemyClicked = true;
-                    Debug.Log("EnemyClicked");
                 }
                 else
                 {
@@ -39,14 +38,19 @@ public class PlayerMovement : MonoBehaviour
                     walking = true;
                     enemyClicked = false;
                     navMeshAgent.destination = hit.point;
-                    navMeshAgent.Resume();
+                    navMeshAgent.isStopped = false;
                 }
             }
         }
 
-        if (enemyClicked)
+        if (enemyClicked && Input.GetButton("Fire2") && !targetedEnemy.GetComponent<EnemyGUI>().IsEnabled)
         {
-            // Move within range and kill enemy.
+            // Display the enemy GUI options while the button is held.
+            targetedEnemy.GetComponent<EnemyGUI>().IsEnabled = true;
+        }
+        else if (targetedEnemy && targetedEnemy.GetComponent<EnemyGUI>().IsEnabled && !Input.GetButton("Fire2"))
+        {
+            targetedEnemy.GetComponent<EnemyGUI>().IsEnabled = false;
         }
     }
 }
