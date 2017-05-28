@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     //private Animator anim;                          // Animator for idle and moving animations.
-    private NavMeshAgent navMeshAgent;              // Pathfinding component for click movement.
+    private UnityEngine.AI.NavMeshAgent navMeshAgent;              // Pathfinding component for click movement.
     private Transform targetedEnemy;                // The enemy that is being clicked on.
     private bool walking;                           // Play walk animation when true.
     private bool enemyClicked;                      // Move towards clicked enemy.
@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     void Awake()
     {
         //anim = GetComponent<Animator>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     // Update is called once per frame.
@@ -26,11 +26,12 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Physics.Raycast(ray, out hit, raycastDistance))
             {
-                if (hit.collider.CompareTag("Enemy"))
+                if (hit.collider.CompareTag("EnemyTarget"))
                 {
                     // Enemy clicked.
                     targetedEnemy = hit.transform;
                     enemyClicked = true;
+                    Debug.Log("EnemyClicked");
                 }
                 else
                 {
@@ -43,10 +44,9 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // 
         if (enemyClicked)
         {
-
+            // Move within range and kill enemy.
         }
     }
 }
