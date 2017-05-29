@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+[RequireComponent(typeof(LineRenderer))]
 public class EnemyGUI : MonoBehaviour
 {
     public GUISkin enemyGUISkin;
+
+    private LineRenderer GUISelectionLine;
 
     private Vector3 enemyScreenLocation;
 
     private Vector2 buttonOneOffset;
     private Vector2 buttonTwoOffset;
-
     private float buttonWidth;
     private float buttonHeight;
 
@@ -40,6 +42,11 @@ public class EnemyGUI : MonoBehaviour
             }
         }
 
+        GUISelectionLine = GetComponent<LineRenderer>();
+        GUISelectionLine.startWidth = 0.2f;
+        GUISelectionLine.endWidth = 0.2f;
+        GUISelectionLine.enabled = true;
+
         buttonWidth = 75.0f;
         buttonHeight = 30.0f;
 
@@ -54,6 +61,13 @@ public class EnemyGUI : MonoBehaviour
     void Update()
     {
         enemyScreenLocation = Camera.main.WorldToScreenPoint(transform.position);
+
+        if (true)
+        {
+            GUISelectionLine.SetPosition(0, transform.position);
+            Vector2 cursorPosition = Camera.main.WorldToScreenPoint(Input.mousePosition);
+            GUISelectionLine.SetPosition(1, cursorPosition);
+        }
     }
 
     // Called for rendering and handling GUI events.
@@ -62,8 +76,8 @@ public class EnemyGUI : MonoBehaviour
         if (isEnabled)
         {
             GUI.skin = enemyGUISkin;
-            //GUI.Label(new Rect(enemyScreenLocation.x + buttonOneOffset.x, (Screen.height - enemyScreenLocation.y) + buttonOneOffset.y, buttonWidth, buttonHeight), "Eliminate");
-            //GUI.Label(new Rect(enemyScreenLocation.x + buttonTwoOffset.x, (Screen.height - enemyScreenLocation.y) + buttonTwoOffset.y, buttonWidth, buttonHeight), "Subdue");
+
+            // Draw the player option buttons.
             GUI.Button(new Rect(enemyScreenLocation.x + buttonOneOffset.x, (Screen.height - enemyScreenLocation.y) + buttonOneOffset.y, buttonWidth, buttonHeight), "Eliminate");
             GUI.Button(new Rect(enemyScreenLocation.x + buttonTwoOffset.x, (Screen.height - enemyScreenLocation.y) + buttonTwoOffset.y, buttonWidth, buttonHeight), "Subdue");
         }

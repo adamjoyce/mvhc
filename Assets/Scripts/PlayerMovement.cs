@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
 public class PlayerMovement : MonoBehaviour
 {
-    //private Animator anim;                          // Animator for idle and moving animations.
+    //private Animator anim;                                        // Animator for idle and moving animations.
     private UnityEngine.AI.NavMeshAgent navMeshAgent;              // Pathfinding component for click movement.
-    private Transform targetedEnemy;                // The enemy that is being clicked on.
-    private bool walking;                           // Play walk animation when true.
-    private bool enemyClicked;                      // Move towards clicked enemy.
-    private int raycastDistance = 100;              // Maximum distance from the player camera to any terrain.
+    private Transform targetedEnemy;                                // The enemy that is being clicked on.
+    private bool walking;                                           // Play walk animation when true.
+    private bool enemyClicked;                                      // Move towards clicked enemy.
+    private int raycastDistance = 100;                              // Maximum distance from the player camera to any terrain.
 
     // Use this for initialization.
     void Awake()
