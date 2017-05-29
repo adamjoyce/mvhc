@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(AudioSource))]
 public abstract class CharacterHealth : MonoBehaviour
 {
     public int maxHealth = 100;                 // The amount of health the character begins the game with.
@@ -13,7 +15,7 @@ public abstract class CharacterHealth : MonoBehaviour
     private bool isDead;                        // Whether the character is dead.
     private bool damaged;                       // True when the player gets damaged.
 
-    // Use this for initialization.
+    /* Use this for initialization. */
     protected virtual void Awake()
     {
         // Reference setup.
@@ -24,6 +26,7 @@ public abstract class CharacterHealth : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+    /* Called when the character takes damage from a source. */
     protected virtual void TakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
@@ -35,6 +38,7 @@ public abstract class CharacterHealth : MonoBehaviour
         }
     }
     
+    /* Called when the character's hitpoints reach zero for character death. */
     protected virtual void OnDeath()
     {
         isDead = true;

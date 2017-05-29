@@ -25,8 +25,8 @@ public class EnemyGUI : MonoBehaviour
         set { isEnabled = value; }
     }
 
-    // Use for initialisation.
-    void Start()
+    /* Use for initialisation. */
+    private void Start()
     {
         if (!enemyGUISkin)
         {
@@ -58,8 +58,8 @@ public class EnemyGUI : MonoBehaviour
         isEnabled = false;
     }
 
-    // Update is called once per frame.
-    void Update()
+    /* Update is called once per frame. */
+    private void Update()
     {
         enemyScreenLocation = Camera.main.WorldToScreenPoint(transform.position);
 
@@ -74,8 +74,8 @@ public class EnemyGUI : MonoBehaviour
         //GUISelectionLine.SetPosition(1, hit.point);
 }
 
-    // Called for rendering and handling GUI events.
-    void OnGUI()
+    /* Called for rendering and handling GUI events. */
+    private void OnGUI()
     {
         if (isEnabled)
         {

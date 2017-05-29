@@ -11,15 +11,15 @@ public class PlayerMovement : MonoBehaviour
     private bool enemyClicked;                                      // Move towards clicked enemy.
     private int raycastDistance = 1000;                             // Maximum distance from the player camera to any terrain.
 
-    // Use this for initialization.
-    void Awake()
+    /* Use this for initialization. */
+    private void Awake()
     {
         //anim = GetComponent<Animator>();
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
-    // Update is called once per frame.
-    void Update()
+    /* Update is called once per frame. */
+    private void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
                     // Enemy clicked.
                     targetedEnemy = hit.transform;
                     enemyClicked = true;
+                    navMeshAgent.isStopped = true;
                     //Debug.Log("Enemy clicked.");
                 }
                 else if (hit.collider.CompareTag("NavMesh"))
@@ -62,5 +63,14 @@ public class PlayerMovement : MonoBehaviour
         {
             targetedEnemy.GetComponent<EnemyGUI>().IsEnabled = false;
         }
+    }
+
+    /* Sets the player's NavMesh agent movement - facilitates an abrupt stop. */
+    private void SetMovement(bool isStationary, bool forceAbruptStop = false)
+    {
+        if (forceAbruptStop)
+            navMeshAgent.velocity = Vector3.zero;
+
+        navMeshAgent.isStopped = isStationary;
     }
 }
