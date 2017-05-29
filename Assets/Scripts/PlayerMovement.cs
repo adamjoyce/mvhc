@@ -5,11 +5,11 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     //private Animator anim;                                        // Animator for idle and moving animations.
-    private UnityEngine.AI.NavMeshAgent navMeshAgent;              // Pathfinding component for click movement.
+    private UnityEngine.AI.NavMeshAgent navMeshAgent;               // Pathfinding component for click movement.
     private Transform targetedEnemy;                                // The enemy that is being clicked on.
     private bool walking;                                           // Play walk animation when true.
     private bool enemyClicked;                                      // Move towards clicked enemy.
-    private int raycastDistance = 100;                              // Maximum distance from the player camera to any terrain.
+    private int raycastDistance = 1000;                             // Maximum distance from the player camera to any terrain.
 
     // Use this for initialization.
     void Awake()
@@ -32,14 +32,23 @@ public class PlayerMovement : MonoBehaviour
                     // Enemy clicked.
                     targetedEnemy = hit.transform;
                     enemyClicked = true;
+                    //Debug.Log("Enemy clicked.");
                 }
-                else
+                else if (hit.collider.CompareTag("NavMesh"))
                 {
                     // Ground clicked.
                     walking = true;
                     enemyClicked = false;
                     navMeshAgent.destination = hit.point;
                     navMeshAgent.isStopped = false;
+                    //Debug.Log("NavMesh clicked.");
+                }
+                else
+                {
+                    // Non-navigable terrain clicked.
+                    walking = false;
+                    enemyClicked = false;
+                    //Debug.Log("Empty-space clicked.");
                 }
             }
         }

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[RequireComponent(typeof(LineRenderer))]
+//[RequireComponent(typeof(LineRenderer))]
 public class EnemyGUI : MonoBehaviour
 {
     public GUISkin enemyGUISkin;
 
-    private LineRenderer GUISelectionLine;
+    //private LineRenderer GUISelectionLine;
 
     private Vector3 enemyScreenLocation;
 
@@ -42,10 +42,11 @@ public class EnemyGUI : MonoBehaviour
             }
         }
 
-        GUISelectionLine = GetComponent<LineRenderer>();
-        GUISelectionLine.startWidth = 0.2f;
-        GUISelectionLine.endWidth = 0.2f;
-        GUISelectionLine.enabled = true;
+        //GUISelectionLine = GetComponent<LineRenderer>();
+        //GUISelectionLine.startWidth = 0.2f;
+        //GUISelectionLine.endWidth = 0.2f;
+        //GUISelectionLine.SetVertexCount(2);
+        //GUISelectionLine.enabled = true;
 
         buttonWidth = 75.0f;
         buttonHeight = 30.0f;
@@ -62,13 +63,16 @@ public class EnemyGUI : MonoBehaviour
     {
         enemyScreenLocation = Camera.main.WorldToScreenPoint(transform.position);
 
-        if (true)
-        {
-            GUISelectionLine.SetPosition(0, transform.position);
-            Vector2 cursorPosition = Camera.main.WorldToScreenPoint(Input.mousePosition);
-            GUISelectionLine.SetPosition(1, cursorPosition);
-        }
-    }
+        //GUISelectionLine.SetPosition(0, transform.position);
+
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //RaycastHit hit;
+        //Physics.Raycast(ray, out hit, 100);
+
+
+        //Vector3 cursorLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //GUISelectionLine.SetPosition(1, hit.point);
+}
 
     // Called for rendering and handling GUI events.
     void OnGUI()
