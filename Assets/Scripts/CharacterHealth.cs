@@ -15,6 +15,12 @@ public abstract class CharacterHealth : MonoBehaviour
     private bool isDead;                        // Whether the character is dead.
     private bool damaged;                       // True when the player gets damaged.
 
+    protected bool Damaged
+    {
+        get { return damaged; }
+        set { damaged = value; }
+    }
+
     /* Use this for initialization. */
     protected virtual void Awake()
     {
@@ -26,9 +32,13 @@ public abstract class CharacterHealth : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+    /* Update will be called once per frame in derived classes. */
+    protected abstract void Update();
+
     /* Called when the character takes damage from a source. */
     protected virtual void TakeDamage(int damageAmount)
     {
+        damaged = true;
         currentHealth -= damageAmount;
         characterAudio.Play();
 
