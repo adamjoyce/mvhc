@@ -6,8 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public abstract class CharacterHealth : MonoBehaviour
 {
-    public int maxHealth = 100;                 // The amount of health the character begins the game with.
-    public int currentHealth;                   // The character's current health total.
+    public float maxHealth = 100.0f;            // The amount of health the character begins the game with.
+    public float currentHealth;                 // The character's current health total.
     public AudioClip deathAudio;                // The audio clip that is played when the character dies.
 
     private Animator anim;                      // Reference to the character's Animator component.
