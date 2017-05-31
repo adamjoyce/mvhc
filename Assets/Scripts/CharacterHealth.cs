@@ -33,6 +33,7 @@ public abstract class CharacterHealth : MonoBehaviour
     }
 
     /* Update will be called once per frame in derived classes. */
+    /* NOTE: Might be better as a virtual function - not sure if all characters will require implementation. */
     protected abstract void Update();
 
     /* Called when the character takes damage from a source. */

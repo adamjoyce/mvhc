@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     /* Update is called once per frame. */
     private void Update()
     {
+        // Raycast for player movement.
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Input.GetButtonDown("Fire2"))
@@ -54,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        // Update enemy GUI components.
         if (enemyClicked && Input.GetButton("Fire2") && !targetedEnemy.GetComponent<EnemyGUI>().IsEnabled)
         {
             // Display the enemy GUI options while the button is held.

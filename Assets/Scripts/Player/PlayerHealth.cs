@@ -67,9 +67,9 @@ public class PlayerHealth : CharacterHealth
         }
 
         // Simulate taking damage with LMB - for debugging.
-        if (Input.GetButtonDown("Fire1"))
-        {
-            TakeDamage(10);
-        }
+        //if (Input.GetButtonDown("Fire1"))
+        //{
+        //    TakeDamage(10);
+        //}
     }
 }

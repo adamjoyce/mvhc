@@ -48,10 +48,10 @@ public class EnemyGUI : MonoBehaviour
         //GUISelectionLine.SetVertexCount(2);
         //GUISelectionLine.enabled = true;
 
-        buttonWidth = 75.0f;
-        buttonHeight = 30.0f;
+        buttonWidth = 200.0f;
+        buttonHeight = 200.0f;
 
-        float buttonOffset = 100.0f;
+        float buttonOffset = 220.0f;
         buttonOneOffset = new Vector2(-buttonOffset, -(buttonHeight * 0.5f));
         buttonTwoOffset = new Vector2(buttonOffset - buttonWidth, -(buttonHeight * 0.5f));
 
@@ -81,8 +81,12 @@ public class EnemyGUI : MonoBehaviour
         {
             GUI.skin = enemyGUISkin;
 
-            // Draw the player option buttons.
+            // Draw the left eliminate button.
+            GUI.skin.button.alignment = TextAnchor.MiddleRight;
             GUI.Button(new Rect(enemyScreenLocation.x + buttonOneOffset.x, (Screen.height - enemyScreenLocation.y) + buttonOneOffset.y, buttonWidth, buttonHeight), "Eliminate");
+
+            // Draw the right subdue button.
+            GUI.skin.button.alignment = TextAnchor.MiddleLeft;
             GUI.Button(new Rect(enemyScreenLocation.x + buttonTwoOffset.x, (Screen.height - enemyScreenLocation.y) + buttonTwoOffset.y, buttonWidth, buttonHeight), "Subdue");
         }
     }
