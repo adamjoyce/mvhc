@@ -6,11 +6,14 @@ using UnityEngine.UI;
 public class PlayerHealth : CharacterHealth
 {
     public Image lowHealthImage;                                            // The image that pulses on the screen when health is low.
-    public Color pulseColour = new Color(0.0f, 0.0f, 0.0f, 0.5f);           // 
+    public Color lowerPulseColour = new Color(1.0f, 0.0f, 0.0f, 0.25f);     // The colour for the lowHealthImage lower bound.
+    public Color upperPulseColour = new Color(1.0f, 0.0f, 0.0f, 0.5f);      // The colour for the lowHealthImage upper bound.
+    public float pulseSpeed = 15.0f;                                        // The speed at which the one lerped pulse transistion occurs.
+    public float lowHealthPercentageBound = 0.25f;                          // When the player reaches this health percentage screen pulsing begins.
 
     public Image damageImage;                                               // The image that flashes on screen when damage it taken.
-    public float flashSpeed = 5.0f;                                         // The speed at which the damage image will fade.
     public Color flashColour = new Color(1.0f, 0.0f, 0.0f, 0.1f);           // The colour of the damage image.
+    public float flashSpeed = 5.0f;                                         // The speed at which the damage image will fade.
 
     private bool lowerAlphaReached = true;
 
@@ -40,23 +43,24 @@ public class PlayerHealth : CharacterHealth
         Damaged = false;
 
         // Visual feedback for low health status.
-        if (currentHealth <= maxHealth * 0.25f)
+        if (currentHealth <= maxHealth * lowHealthPercentageBound)
         {
             // Pulse low health.
             if (lowerAlphaReached)
             {
-                lowHealthImage.color = Color.Lerp(lowHealthImage.color, pulseColour, 15.0f * Time.deltaTime);
+                lowHealthImage.color = Color.Lerp(lowHealthImage.color, upperPulseColour, pulseSpeed * Time.deltaTime);
             }
             else
             {
-                lowHealthImage.color = Color.Lerp(lowHealthImage.color, new Color(0, 0, 0, 0.25f), 15.0f * Time.deltaTime);
+                lowHealthImage.color = Color.Lerp(lowHealthImage.color, lowerPulseColour, pulseSpeed * Time.deltaTime);
             }
 
-            if (lowHealthImage.color == new Color(0, 0, 0, 0.25f))
+            // Check if either aplha bound has been reached.
+            if (lowHealthImage.color == lowerPulseColour)
             {
                 lowerAlphaReached = true;
             }
-            else if (lowHealthImage.color == pulseColour)
+            else if (lowHealthImage.color == upperPulseColour)
             {
                 lowerAlphaReached = false;
             }
