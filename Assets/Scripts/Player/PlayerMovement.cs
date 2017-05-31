@@ -4,11 +4,14 @@ using System.Collections;
 [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
 public class PlayerMovement : MonoBehaviour
 {
+    public float attackRange = 5.0f;                               // The disatnce from a target the player must be before performing an attack.
+
     //private Animator anim;                                        // Animator for idle and moving animations.
     private UnityEngine.AI.NavMeshAgent navMeshAgent;               // Pathfinding component for click movement.
-    private Transform targetedEnemy;                                // The enemy that is being clicked on.
+    private GameObject targetedEnemy;                                // The enemy that is being clicked on.
     private bool walking;                                           // Play walk animation when true.
     private bool enemyClicked;                                      // Move towards clicked enemy.
+    private bool performAttack;                                     // True is an attack option has been selected.
     private int raycastDistance = 1000;                             // Maximum distance from the player camera to any terrain.
 
     /* Use this for initialization. */
@@ -16,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
     {
         //anim = GetComponent<Animator>();
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        walking = false;
+        enemyClicked = false;
+        performAttack = false;
     }
 
     /* Update is called once per frame. */
@@ -31,8 +37,9 @@ public class PlayerMovement : MonoBehaviour
                 if (hit.collider.CompareTag("EnemyTarget"))
                 {
                     // Enemy clicked.
-                    targetedEnemy = hit.transform;
+                    targetedEnemy = hit.transform.gameObject;
                     enemyClicked = true;
+                    performAttack = false;
                     navMeshAgent.isStopped = true;
                     //Debug.Log("Enemy clicked.");
                 }
@@ -41,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
                     // Ground clicked.
                     walking = true;
                     enemyClicked = false;
+                    performAttack = false;
                     navMeshAgent.destination = hit.point;
                     navMeshAgent.isStopped = false;
                     //Debug.Log("NavMesh clicked.");
@@ -50,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
                     // Non-navigable terrain clicked.
                     walking = false;
                     enemyClicked = false;
+                    performAttack = false;
                     //Debug.Log("Empty-space clicked.");
                 }
             }
@@ -64,6 +73,58 @@ public class PlayerMovement : MonoBehaviour
         else if (targetedEnemy && targetedEnemy.GetComponent<EnemyGUI>().IsEnabled && !Input.GetButton("Fire2"))
         {
             targetedEnemy.GetComponent<EnemyGUI>().IsEnabled = false;
+        }
+
+        // Signals an attack is coming.
+        if (Input.GetButtonUp("Fire2"))
+        {
+            performAttack = true;
+        }
+
+        // Is an enemy option button being selected?
+        if (enemyClicked && performAttack)
+        {
+            if (targetedEnemy.GetComponent<EnemyGUI>().HoverLeftButton)
+            {
+                MoveAndAttack(ref targetedEnemy, true);
+            }
+            else if (targetedEnemy.GetComponent<EnemyGUI>().HoverRightButton)
+            {
+                MoveAndAttack(ref targetedEnemy, false);
+            }
+        }
+    }
+
+    /* Move the player into target range and perform an attack. */
+    private void MoveAndAttack(ref GameObject target, bool killTarget)
+    {
+        navMeshAgent.destination = target.transform.position;
+
+        float distanceToTarget = (target.transform.position - transform.position).magnitude;
+        if (distanceToTarget >= attackRange)
+        {
+            navMeshAgent.isStopped = false;
+            walking = true;
+        }
+        else
+        {
+            if (killTarget)
+            {
+                // Eliminate the target...
+
+                performAttack = false;
+                Debug.Log("Eliminate the target.");
+            }
+            else
+            {
+                // Subdue the target...
+
+                performAttack = false;
+                Debug.Log("Subdue the target.");
+            }
+
+            navMeshAgent.isStopped = true;
+            walking = false;
         }
     }
 
