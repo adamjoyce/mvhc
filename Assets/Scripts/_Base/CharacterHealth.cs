@@ -15,6 +15,11 @@ public abstract class CharacterHealth : MonoBehaviour
     private bool isDead;                        // Whether the character is dead.
     private bool damaged;                       // True when the player gets damaged.
 
+    public bool IsDead
+    {
+        get { return isDead; }
+    }
+
     protected bool Damaged
     {
         get { return damaged; }
@@ -30,6 +35,9 @@ public abstract class CharacterHealth : MonoBehaviour
 
         // Health begins at maximum.
         currentHealth = maxHealth;
+
+        // Character to start alive.
+        isDead = false;
     }
 
     /* Update will be called once per frame in derived classes. */
@@ -37,7 +45,7 @@ public abstract class CharacterHealth : MonoBehaviour
     protected abstract void Update();
 
     /* Called when the character takes damage from a source. */
-    protected virtual void TakeDamage(int damageAmount)
+    public virtual void TakeDamage(float damageAmount)
     {
         damaged = true;
         currentHealth -= damageAmount;

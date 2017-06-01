@@ -4,11 +4,11 @@ using System.Collections;
 [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
 public class PlayerMovement : MonoBehaviour
 {
-    public float attackRange = 5.0f;                               // The disatnce from a target the player must be before performing an attack.
+    public float attackRange = 5.0f;                                // The disatnce from a target the player must be before performing an attack.
 
     //private Animator anim;                                        // Animator for idle and moving animations.
     private UnityEngine.AI.NavMeshAgent navMeshAgent;               // Pathfinding component for click movement.
-    private GameObject targetedEnemy;                                // The enemy that is being clicked on.
+    private GameObject targetedEnemy;                               // The enemy that is being clicked on.
     private bool walking;                                           // Play walk animation when true.
     private bool enemyClicked;                                      // Move towards clicked enemy.
     private bool performAttack;                                     // True is an attack option has been selected.
@@ -86,17 +86,17 @@ public class PlayerMovement : MonoBehaviour
         {
             if (targetedEnemy.GetComponent<EnemyGUI>().HoverLeftButton)
             {
-                MoveAndAttack(ref targetedEnemy, true);
+                MoveAndAttack(targetedEnemy, true);
             }
             else if (targetedEnemy.GetComponent<EnemyGUI>().HoverRightButton)
             {
-                MoveAndAttack(ref targetedEnemy, false);
+                MoveAndAttack(targetedEnemy, false);
             }
         }
     }
 
     /* Move the player into target range and perform an attack. */
-    private void MoveAndAttack(ref GameObject target, bool killTarget)
+    private void MoveAndAttack(GameObject target, bool killTarget)
     {
         navMeshAgent.destination = target.transform.position;
 
@@ -108,19 +108,25 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (killTarget)
+            PlayerAbilities playerAbilities = GetComponent<PlayerAbilities>();
+            if (playerAbilities)
             {
-                // Eliminate the target...
-
-                performAttack = false;
-                Debug.Log("Eliminate the target.");
+                if (killTarget)
+                {
+                    // Eliminate the target.
+                    playerAbilities.EliminateTarget(target);
+                    performAttack = false;
+                }
+                else
+                {
+                    // Subdue the target.
+                    playerAbilities.SubdueTarget(target);
+                    performAttack = false;
+                }
             }
             else
             {
-                // Subdue the target...
-
-                performAttack = false;
-                Debug.Log("Subdue the target.");
+                Debug.LogWarning("Warning: Player missing PlayerAbilities.cs script.");
             }
 
             navMeshAgent.isStopped = true;
