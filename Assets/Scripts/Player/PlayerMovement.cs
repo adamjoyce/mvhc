@@ -115,14 +115,18 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // Eliminate the target.
                     playerAbilities.EliminateTarget(target);
-                    performAttack = false;
                 }
-                else
+                else if (!target.GetComponent<EnemyHealth>().IsSubdued)
                 {
                     // Subdue the target.
                     playerAbilities.SubdueTarget(target);
-                    performAttack = false;
                 }
+                else
+                {
+                    // Amalgamate with target.
+                    playerAbilities.AmalgamateWithTarget(target);
+                }
+                performAttack = false;
             }
             else
             {

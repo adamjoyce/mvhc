@@ -2,15 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHealth : CharacterHealth {
+public class EnemyHealth : CharacterHealth
+{
+    private bool isSubdued;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	protected override void Update () {
-		
-	}
+    public bool IsSubdued
+    {
+        get { return isSubdued; }
+        set { isSubdued = value; }
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+        isSubdued = false;
+    }
+
+    // Update is called once per frame
+    protected override void Update()
+    {
+
+    }
 }

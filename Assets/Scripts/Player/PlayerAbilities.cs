@@ -11,6 +11,7 @@ public class PlayerAbilities : MonoBehaviour
         if (targetHealth && !targetHealth.IsDead)
         {
             targetHealth.TakeDamage(targetHealth.currentHealth);
+            Debug.Log("ELIMINATED");
         }
     }
 
@@ -20,9 +21,18 @@ public class PlayerAbilities : MonoBehaviour
         EnemyHealth targetHealth = target.GetComponent<EnemyHealth>();
         if (targetHealth && !targetHealth.IsDead)
         {
-            // Subdue the target...
-            // AKA set subdued state...
-            Debug.Log("SUBDUE!");
+            target.GetComponent<EnemyHealth>().IsSubdued = true;
+            Debug.Log("SUBDUED");
+        }
+    }
+
+    /* Amalgamates with the given target. */
+    public void AmalgamateWithTarget(GameObject target)
+    {
+        EnemyHealth targetHealth = target.GetComponent<EnemyHealth>();
+        if (targetHealth && !targetHealth.IsDead)
+        {
+            Debug.Log("AMALGAMATED");
         }
     }
 }

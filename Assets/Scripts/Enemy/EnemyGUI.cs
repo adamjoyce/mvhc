@@ -125,7 +125,14 @@ public class EnemyGUI : MonoBehaviour
             // Draw the right option button.
             rightButtonRect = new Rect(enemyScreenLocation.x + buttonTwoOffset.x, (Screen.height - enemyScreenLocation.y) + buttonTwoOffset.y, buttonWidth, buttonHeight);
             GUI.skin.button.alignment = TextAnchor.MiddleLeft;
-            GUI.Button(rightButtonRect, "Subdue");
+            if (!GetComponent<EnemyHealth>().IsSubdued)
+            {
+                GUI.Button(rightButtonRect, "Subdue");
+            }
+            else
+            {
+                GUI.Button(rightButtonRect, "Amalgamate");
+            }
         }
     }
 }
