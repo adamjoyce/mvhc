@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
 public class PlayerMovement : MonoBehaviour
 {
     public float attackRange = 5.0f;                                // The disatnce from a target the player must be before performing an attack.
 
-    //private Animator anim;                                        // Animator for idle and moving animations.
+    private Animator anim;                                          // Animator for idle and moving animations.
     private UnityEngine.AI.NavMeshAgent navMeshAgent;               // Pathfinding component for click movement.
     private GameObject targetedEnemy;                               // The enemy that is being clicked on.
-    private bool walking;                                           // Play walk animation when true.
+    private bool isWalking;                                         // Play walk animation when true.
     private bool enemyClicked;                                      // Move towards clicked enemy.
     private bool performAttack;                                     // True is an attack option has been selected.
     private int raycastDistance = 1000;                             // Maximum distance from the player camera to any terrain.
@@ -17,9 +18,9 @@ public class PlayerMovement : MonoBehaviour
     /* Use this for initialization. */
     private void Awake()
     {
-        //anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        walking = false;
+        isWalking = false;
         enemyClicked = false;
         performAttack = false;
     }
@@ -46,21 +47,21 @@ public class PlayerMovement : MonoBehaviour
                 else if (hit.collider.CompareTag("NavMesh"))
                 {
                     // Ground clicked.
-                    walking = true;
+                    isWalking = true;
                     enemyClicked = false;
                     performAttack = false;
                     navMeshAgent.destination = hit.point;
                     navMeshAgent.isStopped = false;
                     //Debug.Log("NavMesh clicked.");
                 }
-                else
-                {
-                    // Non-navigable terrain clicked.
-                    walking = false;
-                    enemyClicked = false;
-                    performAttack = false;
-                    //Debug.Log("Empty-space clicked.");
-                }
+                //else
+                //{
+                //    // Non-navigable terrain clicked.
+                //    isWalking = false;
+                //    enemyClicked = false;
+                //    performAttack = false;
+                //    //Debug.Log("Empty-space clicked.");
+                //}
             }
         }
 
@@ -93,6 +94,19 @@ public class PlayerMovement : MonoBehaviour
                 MoveAndAttack(targetedEnemy, false);
             }
         }
+
+        // Has the player reached its destination?
+        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            isWalking = false;
+        }
+        else
+        {
+            isWalking = true;
+        }
+
+        // Switch between walk and idle animation when necessary.
+        anim.SetBool("IsWalking", isWalking);
     }
 
     /* Move the player into target range and perform an attack. */
@@ -104,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
         if (distanceToTarget >= attackRange)
         {
             navMeshAgent.isStopped = false;
-            walking = true;
+            isWalking = true;
         }
         else
         {
@@ -134,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             navMeshAgent.isStopped = true;
-            walking = false;
+            isWalking = false;
         }
     }
 
