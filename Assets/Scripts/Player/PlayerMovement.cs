@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private bool enemyClicked;                                      // Move towards clicked enemy.
     private bool performAttack;                                     // True is an attack option has been selected.
     private int raycastDistance = 1000;                             // Maximum distance from the player camera to any terrain.
+    private float originalStoppingDistance = 0.0f;                  // The base stopping distance for the player nav mesh compoennt.
 
     /* Use this for initialization. */
     private void Awake()
@@ -40,28 +41,16 @@ public class PlayerMovement : MonoBehaviour
                     // Enemy clicked.
                     targetedEnemy = hit.transform.gameObject;
                     enemyClicked = true;
-                    performAttack = false;
-                    navMeshAgent.isStopped = true;
-                    //Debug.Log("Enemy clicked.");
                 }
                 else if (hit.collider.CompareTag("NavMesh"))
                 {
                     // Ground clicked.
-                    isWalking = true;
+                    //isWalking = true;
                     enemyClicked = false;
-                    performAttack = false;
                     navMeshAgent.destination = hit.point;
                     navMeshAgent.isStopped = false;
-                    //Debug.Log("NavMesh clicked.");
                 }
-                //else
-                //{
-                //    // Non-navigable terrain clicked.
-                //    isWalking = false;
-                //    enemyClicked = false;
-                //    performAttack = false;
-                //    //Debug.Log("Empty-space clicked.");
-                //}
+                performAttack = false;
             }
         }
 
@@ -76,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
             targetedEnemy.GetComponent<EnemyGUI>().IsEnabled = false;
         }
 
-        // Signals an attack is coming.
+        // Signals an attack may be coming.
         if (Input.GetButtonUp("Fire2"))
         {
             performAttack = true;
@@ -98,7 +87,8 @@ public class PlayerMovement : MonoBehaviour
         // Has the player reached its destination?
         if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
         {
-            isWalking = false;
+            if (!navMeshAgent.hasPath || Mathf.Abs(navMeshAgent.velocity.sqrMagnitude) < float.Epsilon)
+                isWalking = false;
         }
         else
         {
@@ -114,11 +104,16 @@ public class PlayerMovement : MonoBehaviour
     {
         navMeshAgent.destination = target.transform.position;
 
+        // Alter the stopping distance to allow for transistion to idle animation.
+        if (navMeshAgent.stoppingDistance != attackRange)
+        {
+            navMeshAgent.stoppingDistance = attackRange;
+        }
+
         float distanceToTarget = (target.transform.position - transform.position).magnitude;
         if (distanceToTarget >= attackRange)
         {
             navMeshAgent.isStopped = false;
-            isWalking = true;
         }
         else
         {
@@ -140,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
                     // Amalgamate with target.
                     playerAbilities.AmalgamateWithTarget(target);
                 }
-                performAttack = false;
+                enemyClicked = false;
             }
             else
             {
@@ -148,16 +143,6 @@ public class PlayerMovement : MonoBehaviour
             }
 
             navMeshAgent.isStopped = true;
-            isWalking = false;
         }
-    }
-
-    /* Sets the player's NavMesh agent movement - facilitates an abrupt stop. */
-    private void SetMovement(bool isStationary, bool forceAbruptStop = false)
-    {
-        if (forceAbruptStop)
-            navMeshAgent.velocity = Vector3.zero;
-
-        navMeshAgent.isStopped = isStationary;
     }
 }
